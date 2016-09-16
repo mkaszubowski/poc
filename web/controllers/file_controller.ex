@@ -1,6 +1,8 @@
 defmodule Poc.FileController do
   use Poc.Web, :controller
 
+  alias Poc.UploadAgent
+
   plug :scrub_params, "file" when action in [:create]
 
   def new(conn, _params) do
@@ -19,7 +21,7 @@ defmodule Poc.FileController do
       |> Enum.map(&(to_string(&1)))
       |> Enum.find(fn filename -> pjdl_file?(filename) end)
 
-
+    UploadAgent.add_upload(pjdl_filename)
     Poc.Endpoint.broadcast("uploads:lobby", "new:upload", %{filename: pjdl_filename})
 
     MyApp.main([pjdl_filename])

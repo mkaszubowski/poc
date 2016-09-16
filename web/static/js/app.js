@@ -28,9 +28,8 @@ $(() => {
     let uploadsField = $(".uploads");
 
     channel.on("new:upload", msg => {
-        console.log(msg);
         if (uploadsField) {
-            uploadsField.append(`<li>${msg.filename}</li>`);
+            uploadsField.prepend(`<li>${msg.filename}</li>`);
         }
     });
 });
