@@ -11,6 +11,7 @@ defmodule Poc.FileController do
 
   def create(conn, %{"file" => file}) do
     upload = file["archive"]
+    title = file["title"]
     filename = "archives/#{upload.filename}"
 
     :ok = File.cp(upload.path, filename)
@@ -21,12 +22,17 @@ defmodule Poc.FileController do
       |> Enum.map(&(to_string(&1)))
       |> Enum.find(fn filename -> pjdl_file?(filename) end)
 
-    UploadAgent.add_upload(pjdl_filename)
-    Poc.Endpoint.broadcast("uploads:lobby", "new:upload", %{filename: pjdl_filename})
+    UploadAgent.add_upload("#{title} - #{pjdl_filename}")
+    Poc.Endpoint.broadcast("uploads:lobby", "new:upload", %{
+          filename: pjdl_filename,
+          title: title
+    })
 
     MyApp.main([pjdl_filename])
 
-    redirect(conn, to: file_path(conn, :new))
+    conn
+    |> put_flash(:info, "File uploaded")
+    |> redirect(to: file_path(conn, :new))
   end
 
   defp pjdl_file?(filename) do

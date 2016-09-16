@@ -29,7 +29,7 @@ $(() => {
 
     channel.on("new:upload", msg => {
         if (uploadsField) {
-            uploadsField.prepend(`<li>${msg.filename}</li>`);
+            uploadsField.prepend(`<li>${msg.title} - ${msg.filename}</li>`);
         }
     });
 });
