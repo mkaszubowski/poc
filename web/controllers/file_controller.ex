@@ -19,6 +19,9 @@ defmodule Poc.FileController do
       |> Enum.map(&(to_string(&1)))
       |> Enum.find(fn filename -> pjdl_file?(filename) end)
 
+
+    Poc.Endpoint.broadcast("uploads:lobby", "new:upload", %{filename: pjdl_filename})
+
     MyApp.main([pjdl_filename])
 
     redirect(conn, to: file_path(conn, :new))

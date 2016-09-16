@@ -20,6 +20,8 @@ defmodule Poc.Router do
 
     get "/file", FileController, :new
     post "/file", FileController, :create
+
+    get "/uploads", PageController, :uploads
   end
 
   # Other scopes may use custom stacks.

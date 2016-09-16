@@ -4,4 +4,8 @@ defmodule Poc.PageController do
   def index(conn, _params) do
     render conn, "index.html"
   end
+
+  def uploads(conn, _params) do
+    render(conn, "uploads.html")
+  end
 end

@@ -11,7 +11,29 @@
 //
 // If you no longer want to use a dependency, remember
 // to also remove its path from "config.paths.watched".
-import "phoenix_html"
+import "phoenix_html";
+
+import {Socket} from "phoenix";
+
+$(() => {
+    let socket = new Socket("/socket");
+    socket.connect();
+
+    let channel = socket.channel("uploads:lobby");
+    channel
+        .join()
+        .receive("ok", () => console.log("Connected to socket"))
+        .receive("error", () => console.log("Can't connect to socket"));
+
+    let uploadsField = $(".uploads");
+
+    channel.on("new:upload", msg => {
+        console.log(msg);
+        if (uploadsField) {
+            uploadsField.append(`<li>${msg.filename}</li>`);
+        }
+    });
+});
 
 // Import local files
 //
